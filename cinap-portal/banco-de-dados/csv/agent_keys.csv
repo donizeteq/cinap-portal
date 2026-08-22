@@ -1,0 +1,3 @@
+id,nome,chave_hash,permissoes,ativa,ultimo_uso,created_at
+59ab6eea-a822-421c-9dd9-9886f2409004,Teste Integração,10632dd434787812593d8618982d2a468ae0bf78a09b6d446684a04d3ec476d8,"{read,write}",t,,2026-08-22 00:22:26.573835+00
+6b4381f4-21b9-428c-85a4-234060620aee,Hermes Teste,c805488bb0ae52fe217f8dc7b9802ca558e71cd77ccbcd9d41a9332d996d017f,"{read,write}",t,,2026-08-22 00:24:35.29946+00

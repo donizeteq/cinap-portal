@@ -1,0 +1,200 @@
+[
+  {
+    "timestamp": 1787349314578000,
+    "id": "efl-0",
+    "event_message": "GET https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?__lovable_sha=5ff4ea76&__lovable_load_id=REDACTED → 200 (ok)",
+    "log_level": "info",
+    "details": {
+      "cf_ray": "a2ece17eba9f98e7",
+      "event_message": "GET https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?__lovable_sha=5ff4ea76&__lovable_load_id=REDACTED → 200 (ok)",
+      "log_level": "info",
+      "outcome": "ok",
+      "request_method": "GET",
+      "request_url": "https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?__lovable_sha=5ff4ea76&__lovable_load_id=REDACTED",
+      "response_status": 200,
+      "script_name": "",
+      "source": "request",
+      "timestamp": 1787349314578000
+    }
+  },
+  {
+    "timestamp": 1787349062199000,
+    "id": "efl-1",
+    "event_message": "GET https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?__lovable_sha=5ff4ea76&__lovable_load_id=REDACTED → 200 (ok)",
+    "log_level": "info",
+    "details": {
+      "cf_ray": "a2ecdb55599798e7",
+      "event_message": "GET https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?__lovable_sha=5ff4ea76&__lovable_load_id=REDACTED → 200 (ok)",
+      "log_level": "info",
+      "outcome": "ok",
+      "request_method": "GET",
+      "request_url": "https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?__lovable_sha=5ff4ea76&__lovable_load_id=REDACTED",
+      "response_status": 200,
+      "script_name": "",
+      "source": "request",
+      "timestamp": 1787349062199000
+    }
+  },
+  {
+    "timestamp": 1787348970329000,
+    "id": "efl-2",
+    "event_message": "GET https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?__lovable_sha=5ff4ea76&__lovable_load_id=REDACTED → 200 (ok)",
+    "log_level": "info",
+    "details": {
+      "cf_ray": "a2ecd913f8e898e7",
+      "event_message": "GET https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?__lovable_sha=5ff4ea76&__lovable_load_id=REDACTED → 200 (ok)",
+      "log_level": "info",
+      "outcome": "ok",
+      "request_method": "GET",
+      "request_url": "https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?__lovable_sha=5ff4ea76&__lovable_load_id=REDACTED",
+      "response_status": 200,
+      "script_name": "",
+      "source": "request",
+      "timestamp": 1787348970329000
+    }
+  },
+  {
+    "timestamp": 1787348559527000,
+    "id": "efl-3",
+    "event_message": "GET https://id-preview-5ff4ea76--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?forceHideBadge=true → 200 (ok)",
+    "log_level": "info",
+    "details": {
+      "cf_ray": "a2eccf103fd1bb8a",
+      "event_message": "GET https://id-preview-5ff4ea76--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?forceHideBadge=true → 200 (ok)",
+      "log_level": "info",
+      "outcome": "ok",
+      "request_method": "GET",
+      "request_url": "https://id-preview-5ff4ea76--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?forceHideBadge=true",
+      "response_status": 200,
+      "script_name": "",
+      "source": "request",
+      "timestamp": 1787348559527000
+    }
+  },
+  {
+    "timestamp": 1787347849278000,
+    "id": "efl-4",
+    "event_message": "GET https://id-preview-a6ad00e6--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?forceHideBadge=true → 200 (ok)",
+    "log_level": "info",
+    "details": {
+      "cf_ray": "a2ecbdb96d64d096",
+      "event_message": "GET https://id-preview-a6ad00e6--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?forceHideBadge=true → 200 (ok)",
+      "log_level": "info",
+      "outcome": "ok",
+      "request_method": "GET",
+      "request_url": "https://id-preview-a6ad00e6--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?forceHideBadge=true",
+      "response_status": 200,
+      "script_name": "",
+      "source": "request",
+      "timestamp": 1787347849278000
+    }
+  },
+  {
+    "timestamp": 1787347648568000,
+    "id": "efl-5",
+    "event_message": "GET https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/ → 200 (ok)",
+    "log_level": "info",
+    "details": {
+      "cf_ray": "a2ecb8cfc869c547",
+      "event_message": "GET https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/ → 200 (ok)",
+      "log_level": "info",
+      "outcome": "ok",
+      "request_method": "GET",
+      "request_url": "https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/",
+      "response_status": 200,
+      "script_name": "",
+      "source": "request",
+      "timestamp": 1787347648568000
+    }
+  },
+  {
+    "timestamp": 1787346892075000,
+    "id": "efl-6",
+    "event_message": "GET https://id-preview-08514f8a--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?forceHideBadge=true → 200 (ok)",
+    "log_level": "info",
+    "details": {
+      "cf_ray": "a2eca65b4c353379",
+      "event_message": "GET https://id-preview-08514f8a--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?forceHideBadge=true → 200 (ok)",
+      "log_level": "info",
+      "outcome": "ok",
+      "request_method": "GET",
+      "request_url": "https://id-preview-08514f8a--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?forceHideBadge=true",
+      "response_status": 200,
+      "script_name": "",
+      "source": "request",
+      "timestamp": 1787346892075000
+    }
+  },
+  {
+    "timestamp": 1787346891466000,
+    "id": "efl-7",
+    "event_message": "GET https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?__lovable_sha=08514f8a&__lovable_load_id=REDACTED → 200 (ok)",
+    "log_level": "info",
+    "details": {
+      "cf_ray": "a2eca6564f91bcd7",
+      "event_message": "GET https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?__lovable_sha=08514f8a&__lovable_load_id=REDACTED → 200 (ok)",
+      "log_level": "info",
+      "outcome": "ok",
+      "request_method": "GET",
+      "request_url": "https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?__lovable_sha=08514f8a&__lovable_load_id=REDACTED",
+      "response_status": 200,
+      "script_name": "",
+      "source": "request",
+      "timestamp": 1787346891466000
+    }
+  },
+  {
+    "timestamp": 1787346762184000,
+    "id": "efl-8",
+    "event_message": "GET https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?__lovable_sha=30ef14a3&__lovable_load_id=REDACTED → 200 (ok)",
+    "log_level": "info",
+    "details": {
+      "cf_ray": "a2eca32c6cf5bcd7",
+      "event_message": "GET https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?__lovable_sha=30ef14a3&__lovable_load_id=REDACTED → 200 (ok)",
+      "log_level": "info",
+      "outcome": "ok",
+      "request_method": "GET",
+      "request_url": "https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/?__lovable_sha=30ef14a3&__lovable_load_id=REDACTED",
+      "response_status": 200,
+      "script_name": "",
+      "source": "request",
+      "timestamp": 1787346762184000
+    }
+  },
+  {
+    "timestamp": 1787346234393000,
+    "id": "efl-9",
+    "event_message": "GET https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/painel → 200 (ok)",
+    "log_level": "info",
+    "details": {
+      "cf_ray": "a2ec9647dcc2f8bf",
+      "event_message": "GET https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/painel → 200 (ok)",
+      "log_level": "info",
+      "outcome": "ok",
+      "request_method": "GET",
+      "request_url": "https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/painel",
+      "response_status": 200,
+      "script_name": "",
+      "source": "request",
+      "timestamp": 1787346234393000
+    }
+  },
+  {
+    "timestamp": 1787345863253000,
+    "id": "efl-10",
+    "event_message": "GET https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/painel → 200 (ok)",
+    "log_level": "info",
+    "details": {
+      "cf_ray": "a2ec8d367c3af8bf",
+      "event_message": "GET https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/painel → 200 (ok)",
+      "log_level": "info",
+      "outcome": "ok",
+      "request_method": "GET",
+      "request_url": "https://id-preview--dc30c657-9a7a-40bd-9f53-f750ec4a7103.lovable.app/painel",
+      "response_status": 200,
+      "script_name": "",
+      "source": "request",
+      "timestamp": 1787345863253000
+    }
+  }
+]

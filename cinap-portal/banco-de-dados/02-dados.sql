@@ -1,0 +1,43 @@
+-- Dados atuais do portal CINAP (INSERTs)
+BEGIN;
+
+-- congregacoes (6 registros)
+INSERT INTO public.congregacoes (id, nome, categoria, qdt_obreiros, valor_mensalidade, cidade, estado, ativa, created_at) VALUES ('11111111-1111-1111-1111-111111111101', 'Igreja Central de São Paulo', 'Ouro', '42', '60.00', 'São Paulo', 'SP', 't', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.congregacoes (id, nome, categoria, qdt_obreiros, valor_mensalidade, cidade, estado, ativa, created_at) VALUES ('11111111-1111-1111-1111-111111111102', 'Congregação Sol Nascente', 'Prata', '18', '50.00', 'Campinas', 'SP', 't', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.congregacoes (id, nome, categoria, qdt_obreiros, valor_mensalidade, cidade, estado, ativa, created_at) VALUES ('11111111-1111-1111-1111-111111111103', 'Comunidade Esperança', 'Bronze', '12', '40.00', 'Curitiba', 'PR', 't', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.congregacoes (id, nome, categoria, qdt_obreiros, valor_mensalidade, cidade, estado, ativa, created_at) VALUES ('11111111-1111-1111-1111-111111111104', 'Missão Vale do Ribeira', 'Prata', '15', '50.00', 'Registro', 'SP', 't', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.congregacoes (id, nome, categoria, qdt_obreiros, valor_mensalidade, cidade, estado, ativa, created_at) VALUES ('11111111-1111-1111-1111-111111111105', 'Monte Sinai Norte', 'Bronze', '8', '40.00', 'Belém', 'PA', 't', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.congregacoes (id, nome, categoria, qdt_obreiros, valor_mensalidade, cidade, estado, ativa, created_at) VALUES ('11111111-1111-1111-1111-111111111106', 'Betel Vila Nova', 'Ouro', '31', '60.00', 'Goiânia', 'GO', 't', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+
+-- obreiros (7 registros)
+INSERT INTO public.obreiros (id, nome, congregacao_id, cargo, status_pagamento, registro, cpf, email, user_id, validade, created_at) VALUES ('22222222-2222-2222-2222-222222222201', 'Pr. Ricardo M. de Souza', '11111111-1111-1111-1111-111111111101', 'Pastor Presidente', 'pago', 'CIN-8822', '123.456.789-00', NULL, NULL, '2028-08-21', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.obreiros (id, nome, congregacao_id, cargo, status_pagamento, registro, cpf, email, user_id, validade, created_at) VALUES ('22222222-2222-2222-2222-222222222202', 'Pb. Antônio dos Santos', '11111111-1111-1111-1111-111111111101', 'Presbítero', 'pago', 'CIN-8823', '223.456.789-00', NULL, NULL, '2028-08-21', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.obreiros (id, nome, congregacao_id, cargo, status_pagamento, registro, cpf, email, user_id, validade, created_at) VALUES ('22222222-2222-2222-2222-222222222203', 'Ev. Marcos Aurélio Lima', '11111111-1111-1111-1111-111111111102', 'Evangelista', 'pendente', 'CIN-8824', '323.456.789-00', NULL, NULL, '2028-08-21', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.obreiros (id, nome, congregacao_id, cargo, status_pagamento, registro, cpf, email, user_id, validade, created_at) VALUES ('22222222-2222-2222-2222-222222222204', 'Dc. José Carlos Ferreira', '11111111-1111-1111-1111-111111111103', 'Diácono', 'atrasado', 'CIN-8825', '423.456.789-00', NULL, NULL, '2028-08-21', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.obreiros (id, nome, congregacao_id, cargo, status_pagamento, registro, cpf, email, user_id, validade, created_at) VALUES ('22222222-2222-2222-2222-222222222205', 'Pr. Elias Barbosa', '11111111-1111-1111-1111-111111111104', 'Pastor Auxiliar', 'pago', 'CIN-8826', '523.456.789-00', NULL, NULL, '2028-08-21', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.obreiros (id, nome, congregacao_id, cargo, status_pagamento, registro, cpf, email, user_id, validade, created_at) VALUES ('22222222-2222-2222-2222-222222222206', 'Pb. Roberto Nogueira', '11111111-1111-1111-1111-111111111106', 'Presbítero', 'pago', 'CIN-8827', '623.456.789-00', NULL, NULL, '2028-08-21', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.obreiros (id, nome, congregacao_id, cargo, status_pagamento, registro, cpf, email, user_id, validade, created_at) VALUES ('22222222-2222-2222-2222-222222222207', 'Dc. Paulo Henrique Alves', '11111111-1111-1111-1111-111111111105', 'Diácono', 'pendente', 'CIN-8828', '723.456.789-00', NULL, NULL, '2028-08-21', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+
+-- pagamentos (10 registros)
+INSERT INTO public.pagamentos (id, obreiro_id, valor, data, status, referencia, created_at) VALUES ('7041e729-fc3e-4b29-aa87-1db406581099', '22222222-2222-2222-2222-222222222201', '60.00', '2026-08-05', 'pago', '08/2026', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.pagamentos (id, obreiro_id, valor, data, status, referencia, created_at) VALUES ('2ac1815b-f22c-40b9-ba05-b7bf71207603', '22222222-2222-2222-2222-222222222202', '60.00', '2026-08-06', 'pago', '08/2026', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.pagamentos (id, obreiro_id, valor, data, status, referencia, created_at) VALUES ('1664bb67-0401-4fce-b9dd-7f3f5fb3344a', '22222222-2222-2222-2222-222222222203', '50.00', '2026-08-10', 'pendente', '08/2026', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.pagamentos (id, obreiro_id, valor, data, status, referencia, created_at) VALUES ('34acf1fb-6103-4e24-9390-32db76b8ac5f', '22222222-2222-2222-2222-222222222204', '40.00', '2026-07-15', 'atrasado', '07/2026', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.pagamentos (id, obreiro_id, valor, data, status, referencia, created_at) VALUES ('b1718e7c-dcdd-44b2-a962-e78462fd2ad5', '22222222-2222-2222-2222-222222222205', '50.00', '2026-08-02', 'pago', '08/2026', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.pagamentos (id, obreiro_id, valor, data, status, referencia, created_at) VALUES ('3ae4e7a3-d7aa-443e-9705-cfed14d2c38b', '22222222-2222-2222-2222-222222222206', '60.00', '2026-08-03', 'pago', '08/2026', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.pagamentos (id, obreiro_id, valor, data, status, referencia, created_at) VALUES ('7e4d5e46-d60c-433e-8202-0b95d881e691', '22222222-2222-2222-2222-222222222207', '40.00', '2026-08-12', 'pendente', '08/2026', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.pagamentos (id, obreiro_id, valor, data, status, referencia, created_at) VALUES ('b7fc7612-8d18-420f-b3e3-7aac34ccdc6c', '22222222-2222-2222-2222-222222222201', '60.00', '2026-07-05', 'pago', '07/2026', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.pagamentos (id, obreiro_id, valor, data, status, referencia, created_at) VALUES ('b35098ff-ac7c-486b-9e52-ed99900b2437', '22222222-2222-2222-2222-222222222202', '60.00', '2026-07-06', 'pago', '07/2026', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.pagamentos (id, obreiro_id, valor, data, status, referencia, created_at) VALUES ('46bd084c-fdf5-4eb5-b3ae-a95152aae9eb', '22222222-2222-2222-2222-222222222205', '50.00', '2026-07-02', 'pago', '07/2026', '2026-08-21 19:31:24.377422+00') ON CONFLICT DO NOTHING;
+
+-- profiles (1 registros)
+INSERT INTO public.profiles (id, nome, cpf, created_at) VALUES ('6215d3b2-d733-4499-9084-e49bbfdad502', 'Donizete SUD', NULL, '2026-08-21 19:46:13.303233+00') ON CONFLICT DO NOTHING;
+
+-- user_roles (1 registros)
+INSERT INTO public.user_roles (id, user_id, role) VALUES ('7468a054-2530-40dc-af32-24ff9181d15c', '6215d3b2-d733-4499-9084-e49bbfdad502', 'admin') ON CONFLICT DO NOTHING;
+
+-- agent_keys (2 registros)
+INSERT INTO public.agent_keys (id, nome, chave_hash, permissoes, ativa, ultimo_uso, created_at) VALUES ('59ab6eea-a822-421c-9dd9-9886f2409004', 'Teste Integração', '10632dd434787812593d8618982d2a468ae0bf78a09b6d446684a04d3ec476d8', '{read,write}', 't', NULL, '2026-08-22 00:22:26.573835+00') ON CONFLICT DO NOTHING;
+INSERT INTO public.agent_keys (id, nome, chave_hash, permissoes, ativa, ultimo_uso, created_at) VALUES ('6b4381f4-21b9-428c-85a4-234060620aee', 'Hermes Teste', 'c805488bb0ae52fe217f8dc7b9802ca558e71cd77ccbcd9d41a9332d996d017f', '{read,write}', 't', NULL, '2026-08-22 00:24:35.29946+00') ON CONFLICT DO NOTHING;
+
+COMMIT;
