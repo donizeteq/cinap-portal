@@ -7,6 +7,12 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
+  base: './',
+  build: {
+    rollupOptions: {
+      output: { manualChunks: undefined },
+    },
+  },
   server: {
     allowedHosts: true,
   },
