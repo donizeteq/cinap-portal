@@ -21,9 +21,11 @@ const NAV_DOCS = [
 export function PortalShell({
   titulo,
   children,
+  acoes,
 }: {
   titulo: string;
   children: ReactNode;
+  acoes?: ReactNode;
 }) {
   const { isAdmin, session } = usePapel();
   const navigate = useNavigate();
@@ -85,9 +87,12 @@ export function PortalShell({
       <main className="lg:pl-64">
         <header className="no-print sticky top-0 z-20 flex h-20 items-center justify-between border-b border-border bg-surface/70 px-6 backdrop-blur-sm lg:px-10">
           <h2 className="font-display text-xl">{titulo}</h2>
-          <span className="border border-primary/15 bg-primary/5 px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-primary">
-            Sistema online
-          </span>
+          <div className="flex items-center gap-4">
+             {acoes}
+             <span className="border border-primary/15 bg-primary/5 px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-primary">
+              Sistema online
+            </span>
+          </div>
         </header>
         <div className="mx-auto max-w-7xl animate-registry space-y-10 p-6 lg:p-10">{children}</div>
       </main>
