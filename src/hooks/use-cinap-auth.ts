@@ -36,9 +36,9 @@ export function usePapel() {
     enabled: Boolean(userId) && !isDonizete,
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("profiles")
+        .from("user_roles")
         .select("role")
-        .eq("id", userId!);
+        .eq("user_id", userId!);
       if (error) throw error;
       return data.map((r) => r.role as string);
     },
