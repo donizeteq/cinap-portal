@@ -1,10 +1,1 @@
-/* Redirect all requests to index.html for SPA routing */
-/* This ensures TanStack Router handles the navigation on Netlify */
-
-/* Set headers for caching and security */
-/* / -> index.html */
-/* /painel -> index.html */
-/* /obreiros -> index.html */
-
-/* Catch-all rule for Single Page Applications */
-/* /*  /index.html  200 */
+/* /index.html 200
