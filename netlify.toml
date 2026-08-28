@@ -7,10 +7,6 @@
   included_files = [".output/server/**/*"]
 
 [[redirects]]
-  from = "/assets/*"
-  status = 200
-
-[[redirects]]
   from = "/*"
   to = "/.netlify/functions/server/:splat"
   status = 200
