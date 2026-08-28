@@ -138,7 +138,8 @@ export const listarPerfisAcesso = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await garantirAdmin(context);
-    const ctx = context as unknown as { supabase: any; userId: string; userEmail?: string };
+    const ctx = context as unknown as { supabase: any; userId: string; userEmail?: string; claims?: { email?: string } };
+    const userEmail = (ctx.claims?.email || ctx.userEmail || "").toLowerCase();
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     let listUsersData: any[] = [];
@@ -189,14 +190,19 @@ export const listarPerfisAcesso = createServerFn({ method: "POST" })
     ];
 
     for (const conta of CONTAS_CONHECIDAS) {
-      const jaExiste = Array.from(userMap.values()).some((u) => u.email.toLowerCase() === conta.email.toLowerCase());
+      const emailLower = conta.email.toLowerCase();
+      const isCurrent = userEmail === emailLower;
+      const keyId = isCurrent && ctx.userId ? ctx.userId : `cad-${emailLower}`;
+
+      const jaExiste = Array.from(userMap.values()).some((u) => u.email.toLowerCase() === emailLower);
+
       if (!jaExiste) {
-        userMap.set(`cad-${conta.email}`, {
-          id: `cad-${conta.email}`,
+        userMap.set(keyId, {
+          id: keyId,
           email: conta.email,
           confirmado: true,
           nome: conta.nome,
-          registro: "SECRETARIA",
+          registro: null,
           papeis: ["admin"],
         });
       }
