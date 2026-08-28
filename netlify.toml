@@ -1,9 +1,12 @@
 [build]
+  command = "bun run build"
   publish = ".output/public"
-  command = "npm run build"
 
-[redirects]
-  # SPA fallback for client-side routing
+[functions]
+  node_bundler = "esbuild"
+  included_files = [".output/server/**/*"]
+
+[[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/.netlify/functions/server/:splat"
   status = 200
