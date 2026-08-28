@@ -12,15 +12,24 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as FiliacaoRouteImport } from './routes/filiacao'
+import { Route as RedefinirSenhaRouteImport } from './routes/redefinir-senha'
 import { Route as AuthenticatedAgentesRouteImport } from './routes/_authenticated/agentes'
+import { Route as AuthenticatedAlertasRouteImport } from './routes/_authenticated/alertas'
+import { Route as AuthenticatedAuditoriaRouteImport } from './routes/_authenticated/auditoria'
+import { Route as AuthenticatedConfiguracoesRouteImport } from './routes/_authenticated/configuracoes'
 import { Route as AuthenticatedCongregacoesRouteImport } from './routes/_authenticated/congregacoes'
 import { Route as AuthenticatedCredenciaisRouteImport } from './routes/_authenticated/credenciais'
 import { Route as AuthenticatedMinhaSituacaoRouteImport } from './routes/_authenticated/minha-situacao'
 import { Route as AuthenticatedObreirosRouteImport } from './routes/_authenticated/obreiros'
 import { Route as AuthenticatedPagamentosRouteImport } from './routes/_authenticated/pagamentos'
 import { Route as AuthenticatedPainelRouteImport } from './routes/_authenticated/painel'
+import { Route as AuthenticatedPerfisRouteImport } from './routes/_authenticated/perfis'
+import { Route as AuthenticatedTemplatesEmailRouteImport } from './routes/_authenticated/templates-email'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
+import { Route as ValidarRegistroRouteImport } from './routes/validar.$registro'
 import { Route as ApiPublicAgentRelatorioMensalRouteImport } from './routes/api/public/agent/relatorio-mensal'
+import { Route as ApiPublicHooksAlertasRouteImport } from './routes/api/public/hooks/alertas'
 import { Route as ApiPublicAgentCongregacoesIndexRouteImport } from './routes/api/public/agent/congregacoes/index'
 import { Route as ApiPublicAgentCongregacoesIdRouteImport } from './routes/api/public/agent/congregacoes/$id'
 import { Route as ApiPublicAgentObreirosIndexRouteImport } from './routes/api/public/agent/obreiros/index'
@@ -41,11 +50,37 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FiliacaoRoute = FiliacaoRouteImport.update({
+  id: '/filiacao',
+  path: '/filiacao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RedefinirSenhaRoute = RedefinirSenhaRouteImport.update({
+  id: '/redefinir-senha',
+  path: '/redefinir-senha',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAgentesRoute = AuthenticatedAgentesRouteImport.update({
   id: '/agentes',
   path: '/agentes',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAlertasRoute = AuthenticatedAlertasRouteImport.update({
+  id: '/alertas',
+  path: '/alertas',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAuditoriaRoute = AuthenticatedAuditoriaRouteImport.update({
+  id: '/auditoria',
+  path: '/auditoria',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedConfiguracoesRoute =
+  AuthenticatedConfiguracoesRouteImport.update({
+    id: '/configuracoes',
+    path: '/configuracoes',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedCongregacoesRoute =
   AuthenticatedCongregacoesRouteImport.update({
     id: '/congregacoes',
@@ -79,10 +114,26 @@ const AuthenticatedPainelRoute = AuthenticatedPainelRouteImport.update({
   path: '/painel',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPerfisRoute = AuthenticatedPerfisRouteImport.update({
+  id: '/perfis',
+  path: '/perfis',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTemplatesEmailRoute =
+  AuthenticatedTemplatesEmailRouteImport.update({
+    id: '/templates-email',
+    path: '/templates-email',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthCallbackRoute = AuthCallbackRouteImport.update({
   id: '/callback',
   path: '/callback',
   getParentRoute: () => AuthRoute,
+} as any)
+const ValidarRegistroRoute = ValidarRegistroRouteImport.update({
+  id: '/validar/$registro',
+  path: '/validar/$registro',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicAgentRelatorioMensalRoute =
   ApiPublicAgentRelatorioMensalRouteImport.update({
@@ -90,6 +141,11 @@ const ApiPublicAgentRelatorioMensalRoute =
     path: '/api/public/agent/relatorio-mensal',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksAlertasRoute = ApiPublicHooksAlertasRouteImport.update({
+  id: '/api/public/hooks/alertas',
+  path: '/api/public/hooks/alertas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicAgentCongregacoesIndexRoute =
   ApiPublicAgentCongregacoesIndexRouteImport.update({
     id: '/api/public/agent/congregacoes/',
@@ -124,15 +180,24 @@ const ApiPublicAgentPagamentosIndexRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
+  '/filiacao': typeof FiliacaoRoute
+  '/redefinir-senha': typeof RedefinirSenhaRoute
   '/agentes': typeof AuthenticatedAgentesRoute
+  '/alertas': typeof AuthenticatedAlertasRoute
+  '/auditoria': typeof AuthenticatedAuditoriaRoute
+  '/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/congregacoes': typeof AuthenticatedCongregacoesRoute
   '/credenciais': typeof AuthenticatedCredenciaisRoute
   '/minha-situacao': typeof AuthenticatedMinhaSituacaoRoute
   '/obreiros': typeof AuthenticatedObreirosRoute
   '/pagamentos': typeof AuthenticatedPagamentosRoute
   '/painel': typeof AuthenticatedPainelRoute
+  '/perfis': typeof AuthenticatedPerfisRoute
+  '/templates-email': typeof AuthenticatedTemplatesEmailRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/validar/$registro': typeof ValidarRegistroRoute
   '/api/public/agent/relatorio-mensal': typeof ApiPublicAgentRelatorioMensalRoute
+  '/api/public/hooks/alertas': typeof ApiPublicHooksAlertasRoute
   '/api/public/agent/congregacoes/$id': typeof ApiPublicAgentCongregacoesIdRoute
   '/api/public/agent/obreiros/$id': typeof ApiPublicAgentObreirosIdRoute
   '/api/public/agent/congregacoes/': typeof ApiPublicAgentCongregacoesIndexRoute
@@ -142,15 +207,24 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
+  '/filiacao': typeof FiliacaoRoute
+  '/redefinir-senha': typeof RedefinirSenhaRoute
   '/agentes': typeof AuthenticatedAgentesRoute
+  '/alertas': typeof AuthenticatedAlertasRoute
+  '/auditoria': typeof AuthenticatedAuditoriaRoute
+  '/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/congregacoes': typeof AuthenticatedCongregacoesRoute
   '/credenciais': typeof AuthenticatedCredenciaisRoute
   '/minha-situacao': typeof AuthenticatedMinhaSituacaoRoute
   '/obreiros': typeof AuthenticatedObreirosRoute
   '/pagamentos': typeof AuthenticatedPagamentosRoute
   '/painel': typeof AuthenticatedPainelRoute
+  '/perfis': typeof AuthenticatedPerfisRoute
+  '/templates-email': typeof AuthenticatedTemplatesEmailRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/validar/$registro': typeof ValidarRegistroRoute
   '/api/public/agent/relatorio-mensal': typeof ApiPublicAgentRelatorioMensalRoute
+  '/api/public/hooks/alertas': typeof ApiPublicHooksAlertasRoute
   '/api/public/agent/congregacoes/$id': typeof ApiPublicAgentCongregacoesIdRoute
   '/api/public/agent/obreiros/$id': typeof ApiPublicAgentObreirosIdRoute
   '/api/public/agent/congregacoes': typeof ApiPublicAgentCongregacoesIndexRoute
@@ -162,15 +236,24 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
+  '/filiacao': typeof FiliacaoRoute
+  '/redefinir-senha': typeof RedefinirSenhaRoute
   '/_authenticated/agentes': typeof AuthenticatedAgentesRoute
+  '/_authenticated/alertas': typeof AuthenticatedAlertasRoute
+  '/_authenticated/auditoria': typeof AuthenticatedAuditoriaRoute
+  '/_authenticated/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/_authenticated/congregacoes': typeof AuthenticatedCongregacoesRoute
   '/_authenticated/credenciais': typeof AuthenticatedCredenciaisRoute
   '/_authenticated/minha-situacao': typeof AuthenticatedMinhaSituacaoRoute
   '/_authenticated/obreiros': typeof AuthenticatedObreirosRoute
   '/_authenticated/pagamentos': typeof AuthenticatedPagamentosRoute
   '/_authenticated/painel': typeof AuthenticatedPainelRoute
+  '/_authenticated/perfis': typeof AuthenticatedPerfisRoute
+  '/_authenticated/templates-email': typeof AuthenticatedTemplatesEmailRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/validar/$registro': typeof ValidarRegistroRoute
   '/api/public/agent/relatorio-mensal': typeof ApiPublicAgentRelatorioMensalRoute
+  '/api/public/hooks/alertas': typeof ApiPublicHooksAlertasRoute
   '/api/public/agent/congregacoes/$id': typeof ApiPublicAgentCongregacoesIdRoute
   '/api/public/agent/obreiros/$id': typeof ApiPublicAgentObreirosIdRoute
   '/api/public/agent/congregacoes/': typeof ApiPublicAgentCongregacoesIndexRoute
@@ -182,15 +265,24 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/filiacao'
+    | '/redefinir-senha'
     | '/agentes'
+    | '/alertas'
+    | '/auditoria'
+    | '/configuracoes'
     | '/congregacoes'
     | '/credenciais'
     | '/minha-situacao'
     | '/obreiros'
     | '/pagamentos'
     | '/painel'
+    | '/perfis'
+    | '/templates-email'
     | '/auth/callback'
+    | '/validar/$registro'
     | '/api/public/agent/relatorio-mensal'
+    | '/api/public/hooks/alertas'
     | '/api/public/agent/congregacoes/$id'
     | '/api/public/agent/obreiros/$id'
     | '/api/public/agent/congregacoes/'
@@ -200,15 +292,24 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/filiacao'
+    | '/redefinir-senha'
     | '/agentes'
+    | '/alertas'
+    | '/auditoria'
+    | '/configuracoes'
     | '/congregacoes'
     | '/credenciais'
     | '/minha-situacao'
     | '/obreiros'
     | '/pagamentos'
     | '/painel'
+    | '/perfis'
+    | '/templates-email'
     | '/auth/callback'
+    | '/validar/$registro'
     | '/api/public/agent/relatorio-mensal'
+    | '/api/public/hooks/alertas'
     | '/api/public/agent/congregacoes/$id'
     | '/api/public/agent/obreiros/$id'
     | '/api/public/agent/congregacoes'
@@ -219,15 +320,24 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/filiacao'
+    | '/redefinir-senha'
     | '/_authenticated/agentes'
+    | '/_authenticated/alertas'
+    | '/_authenticated/auditoria'
+    | '/_authenticated/configuracoes'
     | '/_authenticated/congregacoes'
     | '/_authenticated/credenciais'
     | '/_authenticated/minha-situacao'
     | '/_authenticated/obreiros'
     | '/_authenticated/pagamentos'
     | '/_authenticated/painel'
+    | '/_authenticated/perfis'
+    | '/_authenticated/templates-email'
     | '/auth/callback'
+    | '/validar/$registro'
     | '/api/public/agent/relatorio-mensal'
+    | '/api/public/hooks/alertas'
     | '/api/public/agent/congregacoes/$id'
     | '/api/public/agent/obreiros/$id'
     | '/api/public/agent/congregacoes/'
@@ -239,7 +349,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRouteWithChildren
+  FiliacaoRoute: typeof FiliacaoRoute
+  RedefinirSenhaRoute: typeof RedefinirSenhaRoute
+  ValidarRegistroRoute: typeof ValidarRegistroRoute
   ApiPublicAgentRelatorioMensalRoute: typeof ApiPublicAgentRelatorioMensalRoute
+  ApiPublicHooksAlertasRoute: typeof ApiPublicHooksAlertasRoute
   ApiPublicAgentCongregacoesIdRoute: typeof ApiPublicAgentCongregacoesIdRoute
   ApiPublicAgentObreirosIdRoute: typeof ApiPublicAgentObreirosIdRoute
   ApiPublicAgentCongregacoesIndexRoute: typeof ApiPublicAgentCongregacoesIndexRoute
@@ -270,11 +384,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/filiacao': {
+      id: '/filiacao'
+      path: '/filiacao'
+      fullPath: '/filiacao'
+      preLoaderRoute: typeof FiliacaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/redefinir-senha': {
+      id: '/redefinir-senha'
+      path: '/redefinir-senha'
+      fullPath: '/redefinir-senha'
+      preLoaderRoute: typeof RedefinirSenhaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/agentes': {
       id: '/_authenticated/agentes'
       path: '/agentes'
       fullPath: '/agentes'
       preLoaderRoute: typeof AuthenticatedAgentesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/alertas': {
+      id: '/_authenticated/alertas'
+      path: '/alertas'
+      fullPath: '/alertas'
+      preLoaderRoute: typeof AuthenticatedAlertasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/auditoria': {
+      id: '/_authenticated/auditoria'
+      path: '/auditoria'
+      fullPath: '/auditoria'
+      preLoaderRoute: typeof AuthenticatedAuditoriaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/configuracoes': {
+      id: '/_authenticated/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/configuracoes'
+      preLoaderRoute: typeof AuthenticatedConfiguracoesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/congregacoes': {
@@ -319,6 +468,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPainelRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/perfis': {
+      id: '/_authenticated/perfis'
+      path: '/perfis'
+      fullPath: '/perfis'
+      preLoaderRoute: typeof AuthenticatedPerfisRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/templates-email': {
+      id: '/_authenticated/templates-email'
+      path: '/templates-email'
+      fullPath: '/templates-email'
+      preLoaderRoute: typeof AuthenticatedTemplatesEmailRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/auth/callback': {
       id: '/auth/callback'
       path: '/callback'
@@ -326,11 +489,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/validar/$registro': {
+      id: '/validar/$registro'
+      path: '/validar/$registro'
+      fullPath: '/validar/$registro'
+      preLoaderRoute: typeof ValidarRegistroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/agent/relatorio-mensal': {
       id: '/api/public/agent/relatorio-mensal'
       path: '/api/public/agent/relatorio-mensal'
       fullPath: '/api/public/agent/relatorio-mensal'
       preLoaderRoute: typeof ApiPublicAgentRelatorioMensalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/alertas': {
+      id: '/api/public/hooks/alertas'
+      path: '/api/public/hooks/alertas'
+      fullPath: '/api/public/hooks/alertas'
+      preLoaderRoute: typeof ApiPublicHooksAlertasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/agent/congregacoes/': {
@@ -373,22 +550,32 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAgentesRoute: typeof AuthenticatedAgentesRoute
+  AuthenticatedAlertasRoute: typeof AuthenticatedAlertasRoute
+  AuthenticatedAuditoriaRoute: typeof AuthenticatedAuditoriaRoute
+  AuthenticatedConfiguracoesRoute: typeof AuthenticatedConfiguracoesRoute
   AuthenticatedCongregacoesRoute: typeof AuthenticatedCongregacoesRoute
   AuthenticatedCredenciaisRoute: typeof AuthenticatedCredenciaisRoute
   AuthenticatedMinhaSituacaoRoute: typeof AuthenticatedMinhaSituacaoRoute
   AuthenticatedObreirosRoute: typeof AuthenticatedObreirosRoute
   AuthenticatedPagamentosRoute: typeof AuthenticatedPagamentosRoute
   AuthenticatedPainelRoute: typeof AuthenticatedPainelRoute
+  AuthenticatedPerfisRoute: typeof AuthenticatedPerfisRoute
+  AuthenticatedTemplatesEmailRoute: typeof AuthenticatedTemplatesEmailRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAgentesRoute: AuthenticatedAgentesRoute,
+  AuthenticatedAlertasRoute: AuthenticatedAlertasRoute,
+  AuthenticatedAuditoriaRoute: AuthenticatedAuditoriaRoute,
+  AuthenticatedConfiguracoesRoute: AuthenticatedConfiguracoesRoute,
   AuthenticatedCongregacoesRoute: AuthenticatedCongregacoesRoute,
   AuthenticatedCredenciaisRoute: AuthenticatedCredenciaisRoute,
   AuthenticatedMinhaSituacaoRoute: AuthenticatedMinhaSituacaoRoute,
   AuthenticatedObreirosRoute: AuthenticatedObreirosRoute,
   AuthenticatedPagamentosRoute: AuthenticatedPagamentosRoute,
   AuthenticatedPainelRoute: AuthenticatedPainelRoute,
+  AuthenticatedPerfisRoute: AuthenticatedPerfisRoute,
+  AuthenticatedTemplatesEmailRoute: AuthenticatedTemplatesEmailRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -408,7 +595,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
+  FiliacaoRoute: FiliacaoRoute,
+  RedefinirSenhaRoute: RedefinirSenhaRoute,
+  ValidarRegistroRoute: ValidarRegistroRoute,
   ApiPublicAgentRelatorioMensalRoute: ApiPublicAgentRelatorioMensalRoute,
+  ApiPublicHooksAlertasRoute: ApiPublicHooksAlertasRoute,
   ApiPublicAgentCongregacoesIdRoute: ApiPublicAgentCongregacoesIdRoute,
   ApiPublicAgentObreirosIdRoute: ApiPublicAgentObreirosIdRoute,
   ApiPublicAgentCongregacoesIndexRoute: ApiPublicAgentCongregacoesIndexRoute,

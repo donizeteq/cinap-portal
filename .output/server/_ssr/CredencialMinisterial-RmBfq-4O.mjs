@@ -1,5 +1,5 @@
-import { s as dataBR } from "./cinap-PoyC-pfo.mjs";
 import { a as require_jsx_runtime } from "../_libs/react+tanstack__react-query.mjs";
+import { s as dataBR } from "./cinap-PoyC-pfo.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/CredencialMinisterial-RmBfq-4O.js
 var import_jsx_runtime = require_jsx_runtime();
 var retrato_obreiro_default = "/assets/retrato-obreiro-B1c_pLLK.jpg";
