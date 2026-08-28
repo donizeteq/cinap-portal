@@ -26,14 +26,10 @@ export function useSessao() {
 export function usePapel() {
   const { session, carregando } = useSessao();
   const userId = session?.user.id;
-  const userEmail = session?.user.email;
-
-  // Forçar admin para donizeteqsud@gmail.com para resolver erro de RLS
-  const isDonizete = userEmail === "donizeteqsud@gmail.com";
 
   const query = useQuery({
     queryKey: ["papel", userId],
-    enabled: Boolean(userId) && !isDonizete,
+    enabled: Boolean(userId),
     queryFn: async () => {
       const { data, error } = await supabase
         .from("user_roles")
@@ -44,13 +40,12 @@ export function usePapel() {
     },
   });
 
-  const papeis = isDonizete ? ["admin"] : query.data ?? [];
-
+  const papeis = query.data ?? [];
   return {
     session,
     userId,
     papeis,
     isAdmin: papeis.includes("admin"),
-    carregando: carregando || (isDonizete ? false : query.isLoading),
+    carregando: carregando || query.isLoading,
   };
 }

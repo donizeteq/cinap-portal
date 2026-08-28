@@ -7,6 +7,7 @@ import { PortalShell } from "@/components/PortalShell";
 import { CredencialMinisterial } from "@/components/CredencialMinisterial";
 import { usePapel } from "@/hooks/use-cinap-auth";
 import { STATUS_LABEL, statusClasses, type Congregacao, type Obreiro } from "@/lib/cinap";
+import { gerarCredencialPDF } from "@/lib/cinap-pdf";
 
 export const Route = createFileRoute("/_authenticated/credenciais")({
   head: () => ({
@@ -107,10 +108,10 @@ function Credenciais() {
             <>
               <CredencialMinisterial obreiro={obreiro} congregacao={congregacao} />
               <button
-                onClick={() => window.print()}
+                onClick={() => void gerarCredencialPDF(obreiro, congregacao)}
                 className="no-print bg-primary px-8 py-4 text-[11px] font-bold uppercase tracking-widest text-primary-foreground shadow-lg shadow-primary/20 transition-transform hover:-translate-y-0.5"
               >
-                Visualizar / salvar em PDF
+                Baixar credencial em PDF
               </button>
               {obreiro.status_pagamento !== "pago" && (
                 <p className="no-print max-w-xs text-center text-xs text-destructive">

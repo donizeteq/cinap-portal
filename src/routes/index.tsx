@@ -33,12 +33,20 @@ function Index() {
             <p className="font-display text-xl leading-none">CINAP</p>
             <p className="label-registro mt-1">Secretaria Geral</p>
           </div>
-          <Link
-            to="/auth"
-            className="bg-primary px-6 py-3 text-[11px] font-bold uppercase tracking-widest text-primary-foreground"
-          >
-            Acessar portal
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              to="/filiacao"
+              className="border border-border px-6 py-3 text-[11px] font-bold uppercase tracking-widest text-muted-foreground hover:border-primary hover:text-primary"
+            >
+              Filiação
+            </Link>
+            <Link
+              to="/auth"
+              className="bg-primary px-6 py-3 text-[11px] font-bold uppercase tracking-widest text-primary-foreground"
+            >
+              Acessar portal
+            </Link>
+          </div>
         </div>
       </header>
 

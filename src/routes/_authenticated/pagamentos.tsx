@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
+import { notificarStatusMensalidade } from "@/lib/cinap-notificar";
 import { PortalShell } from "@/components/PortalShell";
 import { usePapel } from "@/hooks/use-cinap-auth";
 import {
@@ -18,6 +19,7 @@ import {
   type Pagamento,
 } from "@/lib/cinap";
 import { gerarRelatorioMensalPDF, gerarReciboPDF, resumoPorCategoria } from "@/lib/cinap-pdf";
+import { baixarPlanilha } from "@/lib/cinap-planilha";
 
 export const Route = createFileRoute("/_authenticated/pagamentos")({
   head: () => ({
@@ -127,6 +129,12 @@ function Pagamentos() {
         .update({ status_pagamento: "pago" })
         .eq("id", obreiro.id);
       if (erroObreiro) throw erroObreiro;
+      await notificarStatusMensalidade({
+        obreiroId: obreiro.id,
+        referencia,
+        valor,
+        destinatario: obreiro.email,
+      });
     },
     onSuccess: () => {
       toast.success("Pagamento registrado e mensalidade quitada.");
@@ -151,6 +159,52 @@ function Pagamentos() {
     } catch (erro) {
       toast.error((erro as Error).message);
     }
+  }
+
+  async function exportarPagamentos(formato: "csv" | "xlsx") {
+    const linhas: (string | number)[][] = [
+      ["CINAP - Historico de pagamentos"],
+      ["Referencia", referencia],
+      ["Emitido em", new Date().toLocaleString("pt-BR")],
+      [],
+      ["Congregacao", "Categoria", "Obreiro", "Registro", "Referencia", "Data", "Valor", "Status"],
+    ];
+    const ordenados = [...obreiros].sort((a, b) => {
+      const ca = congregacoes.find((c) => c.id === a.congregacao_id)?.nome ?? "";
+      const cb = congregacoes.find((c) => c.id === b.congregacao_id)?.nome ?? "";
+      return ca.localeCompare(cb) || a.nome.localeCompare(b.nome);
+    });
+    for (const o of ordenados) {
+      const cong = congregacoes.find((c) => c.id === o.congregacao_id);
+      const lista = pagamentos.filter((p) => p.obreiro_id === o.id);
+      if (lista.length === 0) {
+        linhas.push([
+          cong?.nome ?? "-",
+          cong?.categoria ?? "-",
+          o.nome,
+          o.registro,
+          referencia,
+          "-",
+          mensalidadeDe(o),
+          "Sem lancamento",
+        ]);
+        continue;
+      }
+      for (const p of lista) {
+        linhas.push([
+          cong?.nome ?? "-",
+          cong?.categoria ?? "-",
+          o.nome,
+          o.registro,
+          p.referencia,
+          dataBR(p.data),
+          Number(p.valor),
+          STATUS_LABEL[p.status],
+        ]);
+      }
+    }
+    await baixarPlanilha(formato, `cinap-pagamentos-${referencia.replace("/", "-")}`, "Pagamentos", linhas);
+    toast.success("Histórico exportado.");
   }
 
   async function emitirRecibo(pagamento: Pagamento, obreiro: Obreiro) {
@@ -220,6 +274,18 @@ function Pagamentos() {
               className="border border-primary px-4 py-2 text-[11px] font-semibold uppercase tracking-widest text-primary transition-all hover:bg-primary hover:text-primary-foreground"
             >
               Relatório mensal (PDF)
+            </button>
+            <button
+              onClick={() => void exportarPagamentos("csv")}
+              className="border border-border px-4 py-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground transition-all hover:border-primary hover:text-primary"
+            >
+              CSV
+            </button>
+            <button
+              onClick={() => void exportarPagamentos("xlsx")}
+              className="border border-border px-4 py-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground transition-all hover:border-primary hover:text-primary"
+            >
+              XLSX
             </button>
             <input
               value={busca}

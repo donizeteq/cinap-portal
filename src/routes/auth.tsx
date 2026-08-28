@@ -1,6 +1,12 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
+
+import {
+  reenviarVerificacaoEmail,
+  solicitarRecuperacaoSenha,
+} from "@/lib/auth-seguranca.functions";
 
 import { supabase } from "@/integrations/supabase/client";
 
@@ -34,6 +40,9 @@ function AuthPage() {
   const [senha, setSenha] = useState("");
   const [enviando, setEnviando] = useState(false);
   const [aguardandoEmail, setAguardandoEmail] = useState(false);
+  const [recuperando, setRecuperando] = useState(false);
+  const solicitar = useServerFn(solicitarRecuperacaoSenha);
+  const reenviar = useServerFn(reenviarVerificacaoEmail);
 
   useEffect(() => {
     void supabase.auth.getSession().then(({ data }) => {
@@ -47,7 +56,14 @@ function AuthPage() {
     try {
       if (modo === "entrar") {
         const { error } = await supabase.auth.signInWithPassword({ email, password: senha });
-        if (error) throw error;
+        if (error) {
+          if (/confirm/i.test(error.message)) {
+            setAguardandoEmail(true);
+            toast.error("Confirme seu e-mail antes de acessar. Reenvie a verificação se necessário.");
+            return;
+          }
+          throw error;
+        }
         void navigate({ to: "/painel", replace: true });
       } else {
         const { data, error } = await supabase.auth.signUp({
@@ -66,12 +82,55 @@ function AuthPage() {
     }
   }
 
+  async function recuperarSenha() {
+    if (!email.trim()) {
+      toast.error("Informe o e-mail cadastrado para receber o link de recuperação.");
+      return;
+    }
+    setEnviando(true);
+    try {
+      const r = await solicitar({
+        data: {
+          email: email.trim(),
+          redirectTo: `${window.location.origin}/redefinir-senha`,
+        },
+      });
+      if (!r.ok) {
+        toast.error(r.mensagem);
+        return;
+      }
+      toast.success(r.mensagem);
+      setRecuperando(false);
+    } catch (erro) {
+      toast.error(erro instanceof Error ? erro.message : "Não foi possível enviar a recuperação.");
+    } finally {
+      setEnviando(false);
+    }
+  }
+
+  async function reenviarVerificacao() {
+    if (!email.trim()) {
+      toast.error("Informe o e-mail para reenviar a verificação.");
+      return;
+    }
+    try {
+      const r = await reenviar({
+        data: { email: email.trim(), redirectTo: window.location.origin },
+      });
+      if (!r.ok) {
+        toast.error(r.mensagem);
+        return;
+      }
+      toast.success(r.mensagem);
+    } catch (erro) {
+      toast.error(erro instanceof Error ? erro.message : "Não foi possível reenviar.");
+    }
+  }
+
   async function entrarComGoogle() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
     });
     if (error) {
       toast.error("Falha ao autenticar com o Google: " + error.message);
@@ -114,12 +173,49 @@ function AuthPage() {
               : "Cadastre-se com o e-mail registrado na secretaria."}
           </p>
 
-          {aguardandoEmail ? (
+          {recuperando ? (
+            <div className="mt-8 space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Informe o e-mail cadastrado. Enviaremos um link seguro para você definir uma nova
+                senha.
+              </p>
+              <Campo rotulo="E-mail" value={email} onChange={setEmail} type="email" required />
+              <button
+                type="button"
+                onClick={() => void recuperarSenha()}
+                disabled={enviando}
+                className="w-full bg-primary py-4 text-[11px] font-bold uppercase tracking-widest text-primary-foreground disabled:opacity-60"
+              >
+                {enviando ? "Enviando…" : "Enviar link de recuperação"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setRecuperando(false)}
+                className="w-full text-xs text-muted-foreground hover:text-primary"
+              >
+                Voltar ao acesso
+              </button>
+            </div>
+          ) : aguardandoEmail ? (
             <div className="mt-8 border border-border bg-surface p-6">
               <p className="text-sm">
                 Enviamos um e-mail de confirmação para <strong>{email}</strong>. Confirme o cadastro
                 para acessar o portal.
               </p>
+              <button
+                type="button"
+                onClick={() => void reenviarVerificacao()}
+                className="mt-4 w-full border border-border py-3 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground hover:border-primary hover:text-primary"
+              >
+                Reenviar verificação
+              </button>
+              <button
+                type="button"
+                onClick={() => setAguardandoEmail(false)}
+                className="mt-2 w-full text-xs text-muted-foreground hover:text-primary"
+              >
+                Voltar ao acesso
+              </button>
             </div>
           ) : (
             <form onSubmit={enviar} className="mt-8 space-y-4">
@@ -140,6 +236,13 @@ function AuthPage() {
                 className="w-full bg-primary py-4 text-[11px] font-bold uppercase tracking-widest text-primary-foreground shadow-lg shadow-primary/20 transition-transform hover:-translate-y-0.5 disabled:opacity-60"
               >
                 {enviando ? "Processando…" : modo === "entrar" ? "Entrar" : "Cadastrar"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setRecuperando(true)}
+                className="w-full text-xs text-muted-foreground hover:text-primary"
+              >
+                Esqueci minha senha
               </button>
             </form>
           )}

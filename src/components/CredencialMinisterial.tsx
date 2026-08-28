@@ -1,5 +1,8 @@
+import { useEffect, useState } from "react";
+
 import retrato from "@/assets/retrato-obreiro.jpg";
 import { dataBR, type Congregacao, type Obreiro } from "@/lib/cinap";
+import { urlValidacao } from "@/lib/cinap-filiacao";
 
 export function CredencialMinisterial({
   obreiro,
@@ -8,6 +11,23 @@ export function CredencialMinisterial({
   obreiro: Obreiro;
   congregacao?: Congregacao | undefined;
 }) {
+  const [qr, setQr] = useState("");
+
+  useEffect(() => {
+    let ativo = true;
+    void import("qrcode").then(async ({ default: QRCode }) => {
+      const dataUrl = await QRCode.toDataURL(urlValidacao(obreiro.registro), {
+        margin: 0,
+        width: 240,
+        color: { dark: "#0F2240", light: "#FFFFFF" },
+      });
+      if (ativo) setQr(dataUrl);
+    });
+    return () => {
+      ativo = false;
+    };
+  }, [obreiro.registro]);
+
   return (
     <div className="relative flex aspect-[1/1.58] w-[320px] flex-col items-center overflow-hidden rounded-xl border-8 border-primary/5 bg-surface p-6 text-center shadow-card">
       <div className="absolute left-0 top-0 h-1 w-full bg-primary" />
@@ -33,11 +53,19 @@ export function CredencialMinisterial({
       </div>
 
       <div className="mt-auto">
-        <div className="mx-auto flex size-12 items-center justify-center rounded-full border border-primary/20 opacity-40">
-          <div className="size-8 rounded-full border-4 border-double border-primary/30" />
-        </div>
+        {qr ? (
+          <img
+            src={qr}
+            alt={`QR Code de validação da credencial ${obreiro.registro}`}
+            width={64}
+            height={64}
+            className="mx-auto size-16 rounded-sm bg-white p-1 outline outline-1 outline-border"
+          />
+        ) : (
+          <div className="mx-auto size-16 rounded-sm bg-secondary/60" />
+        )}
         <p className="mt-2 text-[8px] uppercase tracking-tighter text-muted-foreground">
-          Selo de autenticidade digital
+          Valide a autenticidade pelo QR Code
         </p>
       </div>
 

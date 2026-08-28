@@ -44,6 +44,138 @@ export type Database = {
         }
         Relationships: []
       }
+      auditoria: {
+        Row: {
+          acao: string
+          created_at: string
+          descricao: string
+          detalhes: Json
+          entidade: string
+          entidade_id: string | null
+          id: string
+          usuario_email: string
+          usuario_id: string | null
+          usuario_nome: string
+        }
+        Insert: {
+          acao: string
+          created_at?: string
+          descricao?: string
+          detalhes?: Json
+          entidade?: string
+          entidade_id?: string | null
+          id?: string
+          usuario_email?: string
+          usuario_id?: string | null
+          usuario_nome?: string
+        }
+        Update: {
+          acao?: string
+          created_at?: string
+          descricao?: string
+          detalhes?: Json
+          entidade?: string
+          entidade_id?: string | null
+          id?: string
+          usuario_email?: string
+          usuario_id?: string | null
+          usuario_nome?: string
+        }
+        Relationships: []
+      }
+      auth_tentativas: {
+        Row: {
+          bloqueado_ate: string | null
+          chave: string
+          created_at: string
+          id: string
+          janela_inicio: string
+          tentativas: number
+          tipo: string
+          ultima_tentativa: string
+          updated_at: string
+        }
+        Insert: {
+          bloqueado_ate?: string | null
+          chave: string
+          created_at?: string
+          id?: string
+          janela_inicio?: string
+          tentativas?: number
+          tipo: string
+          ultima_tentativa?: string
+          updated_at?: string
+        }
+        Update: {
+          bloqueado_ate?: string | null
+          chave?: string
+          created_at?: string
+          id?: string
+          janela_inicio?: string
+          tentativas?: number
+          tipo?: string
+          ultima_tentativa?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      config_alertas: {
+        Row: {
+          assunto_atraso: string
+          assunto_vencimento: string
+          copia_admin: string
+          corpo_atraso: string
+          corpo_vencimento: string
+          dia_vencimento: number
+          dias_antes_aviso: number
+          dominio_email: string
+          emails_ativos: boolean
+          id: boolean
+          meses_intervalo_atraso: number
+          remetente_email: string
+          remetente_nome: string
+          rodape_email: string
+          ultima_execucao: string | null
+          updated_at: string
+        }
+        Insert: {
+          assunto_atraso?: string
+          assunto_vencimento?: string
+          copia_admin?: string
+          corpo_atraso?: string
+          corpo_vencimento?: string
+          dia_vencimento?: number
+          dias_antes_aviso?: number
+          dominio_email?: string
+          emails_ativos?: boolean
+          id?: boolean
+          meses_intervalo_atraso?: number
+          remetente_email?: string
+          remetente_nome?: string
+          rodape_email?: string
+          ultima_execucao?: string | null
+          updated_at?: string
+        }
+        Update: {
+          assunto_atraso?: string
+          assunto_vencimento?: string
+          copia_admin?: string
+          corpo_atraso?: string
+          corpo_vencimento?: string
+          dia_vencimento?: number
+          dias_antes_aviso?: number
+          dominio_email?: string
+          emails_ativos?: boolean
+          id?: boolean
+          meses_intervalo_atraso?: number
+          remetente_email?: string
+          remetente_nome?: string
+          rodape_email?: string
+          ultima_execucao?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       congregacoes: {
         Row: {
           ativa: boolean
@@ -79,6 +211,86 @@ export type Database = {
           valor_mensalidade?: number
         }
         Relationships: []
+      }
+      notificacoes: {
+        Row: {
+          agendado_para: string | null
+          aprovado_em: string | null
+          aprovado_por: string | null
+          created_at: string
+          destinatario: string | null
+          email_enviado: boolean
+          email_erro: string | null
+          enviado_em: string | null
+          id: string
+          lida: boolean
+          mensagem: string
+          meses_atraso: number
+          message_id: string | null
+          obreiro_id: string | null
+          referencia: string
+          situacao: string
+          tentativas: number
+          tipo: string
+          titulo: string
+          ultima_tentativa_em: string | null
+          valor: number
+        }
+        Insert: {
+          agendado_para?: string | null
+          aprovado_em?: string | null
+          aprovado_por?: string | null
+          created_at?: string
+          destinatario?: string | null
+          email_enviado?: boolean
+          email_erro?: string | null
+          enviado_em?: string | null
+          id?: string
+          lida?: boolean
+          mensagem?: string
+          meses_atraso?: number
+          message_id?: string | null
+          obreiro_id?: string | null
+          referencia?: string
+          situacao?: string
+          tentativas?: number
+          tipo?: string
+          titulo?: string
+          ultima_tentativa_em?: string | null
+          valor?: number
+        }
+        Update: {
+          agendado_para?: string | null
+          aprovado_em?: string | null
+          aprovado_por?: string | null
+          created_at?: string
+          destinatario?: string | null
+          email_enviado?: boolean
+          email_erro?: string | null
+          enviado_em?: string | null
+          id?: string
+          lida?: boolean
+          mensagem?: string
+          meses_atraso?: number
+          message_id?: string | null
+          obreiro_id?: string | null
+          referencia?: string
+          situacao?: string
+          tentativas?: number
+          tipo?: string
+          titulo?: string
+          ultima_tentativa_em?: string | null
+          valor?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notificacoes_obreiro_id_fkey"
+            columns: ["obreiro_id"]
+            isOneToOne: false
+            referencedRelation: "obreiros"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       obreiros: {
         Row: {
@@ -218,6 +430,20 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      validar_credencial: {
+        Args: { _registro: string }
+        Returns: {
+          cargo: string
+          cidade: string
+          congregacao: string
+          estado: string
+          nome: string
+          registro: string
+          status_pagamento: string
+          valida: boolean
+          validade: string
+        }[]
       }
     }
     Enums: {

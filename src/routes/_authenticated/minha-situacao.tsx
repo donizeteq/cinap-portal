@@ -1,7 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import { PortalShell } from "@/components/PortalShell";
 import { CredencialMinisterial } from "@/components/CredencialMinisterial";
 import { useSessao } from "@/hooks/use-cinap-auth";
@@ -14,7 +15,9 @@ import {
   type Obreiro,
   type Pagamento,
 } from "@/lib/cinap";
-import { gerarReciboPDF } from "@/lib/cinap-pdf";
+import { gerarCredencialPDF, gerarReciboPDF } from "@/lib/cinap-pdf";
+import { baixarPlanilha } from "@/lib/cinap-planilha";
+import type { Notificacao } from "@/lib/cinap-alertas";
 
 export const Route = createFileRoute("/_authenticated/minha-situacao")({
   head: () => ({
@@ -83,6 +86,21 @@ function MinhaSituacao() {
     },
   });
 
+  const avisos = useQuery({
+    queryKey: ["meus-avisos", obreiro.data?.id],
+    enabled: Boolean(obreiro.data?.id),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("notificacoes")
+        .select("*")
+        .eq("obreiro_id", obreiro.data!.id)
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      return (data ?? []) as unknown as Notificacao[];
+    },
+  });
+
   if (obreiro.isLoading) {
     return (
       <PortalShell titulo="Minha Situação">
@@ -98,9 +116,16 @@ function MinhaSituacao() {
           <p className="label-registro">Registro não localizado</p>
           <h3 className="mt-3 font-display text-3xl">Seu cadastro ainda não foi vinculado</h3>
           <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
-            Procure a secretaria da convenção para vincular seu e-mail de acesso
-            {usuario?.email ? ` (${usuario.email})` : ""} ao seu registro ministerial.
+            Esta área mostra dados apenas para quem possui registro ministerial. Cadastre um obreiro
+            com o e-mail de acesso
+            {usuario?.email ? ` ${usuario.email}` : ""} em Obreiros para que os dados apareçam aqui.
           </p>
+          <Link
+            to="/obreiros"
+            className="mt-6 inline-flex bg-primary px-5 py-3 text-[11px] font-bold uppercase tracking-widest text-primary-foreground"
+          >
+            Ir para obreiros
+          </Link>
         </div>
       </PortalShell>
     );
@@ -111,16 +136,51 @@ function MinhaSituacao() {
     .filter((p) => p.status === "pago")
     .reduce((s, p) => s + Number(p.valor), 0);
 
+  async function exportarMeuHistorico(formato: "csv" | "xlsx") {
+    const linhas: (string | number)[][] = [
+      ["CINAP - Historico de contribuicoes"],
+      ["Obreiro", o.nome],
+      ["Registro", o.registro],
+      ["Congregacao", congregacao.data?.nome ?? "-"],
+      ["Emitido em", new Date().toLocaleString("pt-BR")],
+      [],
+      ["Referencia", "Data", "Valor", "Status"],
+      ...(pagamentos.data ?? []).map((p) => [
+        p.referencia,
+        dataBR(p.data),
+        Number(p.valor),
+        STATUS_LABEL[p.status],
+      ]),
+    ];
+    await baixarPlanilha(
+      formato,
+      `cinap-minhas-contribuicoes-${o.registro}`,
+      "Contribuicoes",
+      linhas,
+    );
+  }
+
   return (
     <PortalShell titulo="Minha Situação">
       <section className="grid gap-10 lg:grid-cols-[340px_1fr]">
         <div className="flex flex-col items-center gap-6 area-impressao">
           <CredencialMinisterial obreiro={o} congregacao={congregacao.data ?? undefined} />
           <button
-            onClick={() => window.print()}
+            onClick={() =>
+              void gerarCredencialPDF(o, congregacao.data ?? undefined).then(
+                () => toast.success("Credencial ministerial gerada em PDF."),
+                (erro: Error) => toast.error(erro.message),
+              )
+            }
             className="no-print w-full bg-primary py-4 text-[11px] font-bold uppercase tracking-widest text-primary-foreground shadow-lg shadow-primary/20 transition-transform hover:-translate-y-0.5"
           >
-            Salvar credencial em PDF
+            Baixar credencial em PDF
+          </button>
+          <button
+            onClick={() => window.print()}
+            className="no-print w-full border border-border py-3 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground hover:border-primary hover:text-primary"
+          >
+            Imprimir credencial
           </button>
         </div>
 
@@ -139,11 +199,86 @@ function MinhaSituacao() {
             </Cartao>
           </div>
 
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="border border-border bg-surface p-5">
+              <p className="label-registro">Meus dados</p>
+              <dl className="mt-3 space-y-1 text-sm">
+                <Linha rotulo="Nome" valor={o.nome} />
+                <Linha rotulo="Registro" valor={o.registro} />
+                <Linha rotulo="Cargo" valor={o.cargo} />
+                <Linha rotulo="E-mail" valor={o.email ?? "—"} />
+              </dl>
+            </div>
+            <div className="border border-border bg-surface p-5">
+              <p className="label-registro">Minha congregação</p>
+              <dl className="mt-3 space-y-1 text-sm">
+                <Linha rotulo="Congregação" valor={congregacao.data?.nome ?? "—"} />
+                <Linha rotulo="Categoria" valor={congregacao.data?.categoria ?? "—"} />
+                <Linha
+                  rotulo="Cidade/UF"
+                  valor={
+                    congregacao.data
+                      ? `${congregacao.data.cidade || "—"}/${congregacao.data.estado || "—"}`
+                      : "—"
+                  }
+                />
+                <Linha
+                  rotulo="Mensalidade"
+                  valor={congregacao.data ? brl(Number(congregacao.data.valor_mensalidade)) : "—"}
+                />
+              </dl>
+            </div>
+          </div>
+
           <div className="border border-border bg-surface">
             <div className="border-b border-border px-6 py-4">
               <h4 className="text-sm font-semibold uppercase tracking-widest">
+                Meus avisos de mensalidade
+              </h4>
+            </div>
+            <ul className="divide-y divide-border/60">
+              {(avisos.data ?? []).map((n) => (
+                <li key={n.id} className="px-6 py-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p className="text-sm font-medium">{n.titulo}</p>
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                      {n.tipo === "vencimento" ? "Vencimento" : `Atraso ${n.meses_atraso}m`} ·{" "}
+                      {new Date(n.created_at).toLocaleDateString("pt-BR")}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-sm text-muted-foreground">{n.mensagem}</p>
+                  <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                    Competência {n.referencia} · {brl(Number(n.valor ?? 0))}
+                  </p>
+                </li>
+              ))}
+              {(avisos.data ?? []).length === 0 && (
+                <li className="px-6 py-8 text-center text-sm text-muted-foreground">
+                  Nenhum aviso de mensalidade registrado. Sua situação está em dia.
+                </li>
+              )}
+            </ul>
+          </div>
+
+          <div className="border border-border bg-surface">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-6 py-4">
+              <h4 className="text-sm font-semibold uppercase tracking-widest">
                 Histórico de contribuições
               </h4>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => void exportarMeuHistorico("csv")}
+                  className="border border-border px-3 py-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground hover:border-primary hover:text-primary"
+                >
+                  CSV
+                </button>
+                <button
+                  onClick={() => void exportarMeuHistorico("xlsx")}
+                  className="border border-border px-3 py-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground hover:border-primary hover:text-primary"
+                >
+                  XLSX
+                </button>
+              </div>
             </div>
             <table className="w-full border-collapse text-left text-sm">
               <thead>
@@ -211,6 +346,15 @@ function MinhaSituacao() {
         </div>
       </section>
     </PortalShell>
+  );
+}
+
+function Linha({ rotulo, valor }: { rotulo: string; valor: string }) {
+  return (
+    <div className="flex items-baseline justify-between gap-3">
+      <dt className="text-[10px] uppercase tracking-widest text-muted-foreground">{rotulo}</dt>
+      <dd className="text-right">{valor}</dd>
+    </div>
   );
 }
 
