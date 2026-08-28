@@ -1,13 +1,11 @@
 [build]
-  command = "bun run build"
+  command = "NITRO_PRESET=netlify bun run build"
   publish = ".output/public"
 
-[[redirects]]
-  from = "/assets/*"
-  to = "/assets/:splat"
-  status = 200
+[functions]
+  node_bundler = "esbuild"
 
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/.netlify/functions/server"
   status = 200
