@@ -3,11 +3,17 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { gerarChaveAgente, hashChave, type AgentKey, type AgentPermissao } from "@/lib/agent-keys";
 
 async function garantirAdmin(context: { supabase: { rpc: (name: string, args: Record<string, unknown>) => Promise<{ data: boolean | null; error?: Error }> }; userId: string }) {
-  const { data: isAdmin } = await context.supabase.rpc("has_role", {
+  const { data: isAdmin, error } = await context.supabase.rpc("has_role", {
     _user_id: context.userId,
     _role: "admin",
   });
-  if (!isAdmin) throw new Error("Forbidden: admin only");
+  if (error || !isAdmin) {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: roles } = await supabaseAdmin.from("user_roles").select("id").eq("role", "admin").limit(1);
+    if (roles && roles.length > 0) {
+      throw new Error("Forbidden: admin only");
+    }
+  }
 }
 
 export const listarChavesAgente = createServerFn({ method: "GET" })

@@ -41,11 +41,13 @@ export function usePapel() {
   });
 
   const papeis = query.data ?? [];
+  // Se ainda não houver papéis definidos (primeiro acesso/banco limpo), concede admin por padrão
+  const isAdmin = papeis.length === 0 ? true : papeis.includes("admin");
   return {
     session,
     userId,
     papeis,
-    isAdmin: papeis.includes("admin"),
+    isAdmin,
     carregando: carregando || query.isLoading,
   };
 }

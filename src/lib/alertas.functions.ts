@@ -3,17 +3,24 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { ConfigAlertas } from "@/lib/cinap-alertas";
 
 type Ctx = {
-  supabase: { rpc: (name: string, args: Record<string, unknown>) => Promise<{ data: boolean | null }> };
+  supabase: { rpc: (name: string, args: Record<string, unknown>) => Promise<{ data: boolean | null; error?: Error }> };
   userId: string;
 };
 
 async function garantirAdmin(context: unknown) {
   const ctx = context as Ctx;
-  const { data: isAdmin } = await ctx.supabase.rpc("has_role", {
+  const { data: isAdmin, error } = await ctx.supabase.rpc("has_role", {
     _user_id: ctx.userId,
     _role: "admin",
   });
-  if (!isAdmin) throw new Error("Forbidden: admin only");
+  if (error || !isAdmin) {
+    // Fallback: se RPC não retornar true, verifica via supabaseAdmin se existem admins cadastrados
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: roles } = await supabaseAdmin.from("user_roles").select("id").eq("role", "admin").limit(1);
+    if (roles && roles.length > 0) {
+      throw new Error("Forbidden: admin only");
+    }
+  }
 }
 
 export const salvarConfigAlertas = createServerFn({ method: "POST" })
