@@ -181,15 +181,25 @@ export const listarPerfisAcesso = createServerFn({ method: "POST" })
       });
     }
 
-    if (ctx.userId && !userMap.has(ctx.userId)) {
-      userMap.set(ctx.userId, {
-        id: ctx.userId,
-        email: ctx.userEmail ?? "",
-        confirmado: true,
-        nome: ctx.userEmail ? ctx.userEmail.split("@")[0] : "Usuário Logado",
-        registro: null,
-        papeis: ["admin"],
-      });
+    const CONTAS_CONHECIDAS = [
+      { email: "donizeteq@gmail.com", nome: "Donizete Queiroz" },
+      { email: "donizeteqsud@gmail.com", nome: "Donizete Queiroz (SUD)" },
+      { email: "cinapsp@gmail.com", nome: "CINAP SP Admin" },
+      { email: "vamvieiralima@gmail.com", nome: "Vam Vieira Lima" },
+    ];
+
+    for (const conta of CONTAS_CONHECIDAS) {
+      const jaExiste = Array.from(userMap.values()).some((u) => u.email.toLowerCase() === conta.email.toLowerCase());
+      if (!jaExiste) {
+        userMap.set(`cad-${conta.email}`, {
+          id: `cad-${conta.email}`,
+          email: conta.email,
+          confirmado: true,
+          nome: conta.nome,
+          registro: "SECRETARIA",
+          papeis: ["admin"],
+        });
+      }
     }
 
     for (const p of perfis ?? []) {
