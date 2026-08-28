@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="14" fill="#743621"/>
+  <!-- Outer Gold Shield/Border Accent -->
+  <rect x="3" y="3" width="58" height="58" rx="11" fill="none" stroke="#D4AF37" stroke-width="2" stroke-opacity="0.6"/>
+  <!-- Cross emblem in Gold -->
+  <path d="M 32 12 V 48 M 20 24 H 44" stroke="#D4AF37" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Inner Cross Highlight -->
+  <path d="M 32 14 V 46 M 22 24 H 42" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+  <!-- Institutional Bible/Book Accent at base -->
+  <path d="M 22 44 Q 32 40 42 44 V 47 Q 32 43 22 47 Z" fill="#D4AF37"/>
+</svg>
