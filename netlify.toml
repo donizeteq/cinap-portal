@@ -4,8 +4,9 @@
 
 [functions]
   node_bundler = "esbuild"
+  included_files = [".output/server/**/*"]
 
 [[redirects]]
   from = "/*"
-  to = "/.netlify/functions/server"
+  to = "/.netlify/functions/server/:splat"
   status = 200
