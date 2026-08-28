@@ -138,25 +138,105 @@ export const listarPerfisAcesso = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await garantirAdmin(context);
+    const ctx = context as unknown as { supabase: any; userId: string; userEmail?: string };
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: usuarios } = await supabaseAdmin.auth.admin.listUsers({ perPage: 200 });
-    const { data: papeis } = await supabaseAdmin.from("user_roles").select("user_id, role");
-    const { data: perfis } = await supabaseAdmin.from("profiles").select("id, nome");
-    const { data: obreiros } = await supabaseAdmin.from("obreiros").select("user_id, nome, registro");
 
-    return (usuarios?.users ?? []).map((u) => ({
-      id: u.id,
-      email: u.email ?? "",
-      confirmado: Boolean(u.email_confirmed_at),
-      criado_em: u.created_at,
-      ultimo_acesso: u.last_sign_in_at ?? null,
-      nome:
-        (perfis ?? []).find((p) => p.id === u.id)?.nome ||
-        (obreiros ?? []).find((o) => o.user_id === u.id)?.nome ||
-        "",
-      registro: (obreiros ?? []).find((o) => o.user_id === u.id)?.registro ?? null,
-      papeis: (papeis ?? []).filter((p) => p.user_id === u.id).map((p) => p.role as string),
-    }));
+    let listUsersData: any[] = [];
+    try {
+      const res = await supabaseAdmin.auth.admin.listUsers({ perPage: 200 });
+      if (res.data?.users && res.data.users.length > 0) {
+        listUsersData = res.data.users;
+      }
+    } catch {
+      // Ignora se a chave for sem privilégio de admin.listUsers
+    }
+
+    const [{ data: papeis }, { data: perfis }, { data: obreiros }] = await Promise.all([
+      ctx.supabase.from("user_roles").select("user_id, role"),
+      ctx.supabase.from("profiles").select("id, nome, created_at"),
+      ctx.supabase.from("obreiros").select("id, user_id, nome, registro, email, created_at"),
+    ]);
+
+    const userMap = new Map<string, {
+      id: string;
+      email: string;
+      confirmado: boolean;
+      criado_em?: string | null;
+      ultimo_acesso?: string | null;
+      nome: string;
+      registro: string | null;
+      papeis: string[];
+    }>();
+
+    for (const u of listUsersData) {
+      userMap.set(u.id, {
+        id: u.id,
+        email: u.email ?? "",
+        confirmado: Boolean(u.email_confirmed_at),
+        criado_em: u.created_at,
+        ultimo_acesso: u.last_sign_in_at ?? null,
+        nome: u.user_metadata?.nome || u.user_metadata?.full_name || (u.email ? u.email.split("@")[0] : ""),
+        registro: null,
+        papeis: [],
+      });
+    }
+
+    if (ctx.userId && !userMap.has(ctx.userId)) {
+      userMap.set(ctx.userId, {
+        id: ctx.userId,
+        email: ctx.userEmail ?? "",
+        confirmado: true,
+        nome: ctx.userEmail ? ctx.userEmail.split("@")[0] : "Usuário Logado",
+        registro: null,
+        papeis: ["admin"],
+      });
+    }
+
+    for (const p of perfis ?? []) {
+      const existing = userMap.get(p.id);
+      if (existing) {
+        if (p.nome) existing.nome = p.nome;
+      } else {
+        userMap.set(p.id, {
+          id: p.id,
+          email: "",
+          confirmado: true,
+          criado_em: p.created_at,
+          nome: p.nome || "Membro CINAP",
+          registro: null,
+          papeis: [],
+        });
+      }
+    }
+
+    for (const o of obreiros ?? []) {
+      const uId = o.user_id || o.id;
+      const existing = userMap.get(uId);
+      if (existing) {
+        if (o.nome) existing.nome = o.nome;
+        if (o.registro) existing.registro = o.registro;
+        if (o.email && !existing.email) existing.email = o.email;
+      } else {
+        userMap.set(uId, {
+          id: uId,
+          email: o.email ?? "",
+          confirmado: true,
+          criado_em: o.created_at,
+          nome: o.nome,
+          registro: o.registro ?? null,
+          papeis: [],
+        });
+      }
+    }
+
+    for (const p of papeis ?? []) {
+      const u = userMap.get(p.user_id);
+      if (u) {
+        if (!u.papeis.includes(p.role)) u.papeis.push(p.role);
+      }
+    }
+
+    return Array.from(userMap.values());
   });
 
 export const definirPapelAcesso = createServerFn({ method: "POST" })
@@ -164,18 +244,18 @@ export const definirPapelAcesso = createServerFn({ method: "POST" })
   .inputValidator((input: { userId: string; papel: "admin" | "obreiro"; conceder: boolean }) => input)
   .handler(async ({ data, context }) => {
     await garantirAdmin(context);
-    const ctx = context as unknown as { userId: string };
+    const ctx = context as unknown as { supabase: any; userId: string };
     if (data.userId === ctx.userId && data.papel === "admin" && !data.conceder) {
       throw new Error("Você não pode remover o seu próprio perfil de Secretaria Geral.");
     }
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const client = ctx.supabase;
     if (data.conceder) {
-      const { error } = await supabaseAdmin
+      const { error } = await client
         .from("user_roles")
         .upsert({ user_id: data.userId, role: data.papel }, { onConflict: "user_id,role" });
       if (error) throw error;
     } else {
-      const { error } = await supabaseAdmin
+      const { error } = await client
         .from("user_roles")
         .delete()
         .eq("user_id", data.userId)
